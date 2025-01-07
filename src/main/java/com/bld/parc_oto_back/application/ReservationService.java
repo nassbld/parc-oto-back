@@ -24,8 +24,9 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
-    public void createReservation(Reservation reservation) {
+    public Reservation createReservation(Reservation reservation) {
         reservationRepository.save(reservation);
+        return reservation;
     }
 
     public void deleteReservation(Long id) {

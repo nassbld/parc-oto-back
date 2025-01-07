@@ -32,7 +32,7 @@ public class ReservationController {
 
 
     @PostMapping
-    public ResponseEntity<Void> createReservation(@RequestBody Reservation reservation) {
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
         reservationService.createReservation(reservation);
         return ResponseEntity.noContent().build();
     }
