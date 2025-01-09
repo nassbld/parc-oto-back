@@ -2,6 +2,7 @@ package com.bld.parc_oto_back.exposition;
 
 import com.bld.parc_oto_back.application.AgencyService;
 import com.bld.parc_oto_back.domain.Agency;
+import com.bld.parc_oto_back.dto.AgencyDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,25 +17,25 @@ public class AgencyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Agency> getAgencyById(@PathVariable Long id) {
+    public ResponseEntity<AgencyDTO> getAgencyById(@PathVariable Long id) {
         return agencyService.getAgencyById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Void> createAgency(@RequestBody Agency agency) {
-        agencyService.createAgency(agency);
+    public ResponseEntity<Void> createAgency(@RequestBody AgencyDTO agencyDTO) {
+        agencyService.createAgency(agencyDTO);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAgency(@PathVariable Long id, @RequestBody Agency agency) {
-        if (!id.equals(agency.getId())) {
+    public ResponseEntity<Void> updateAgency(@PathVariable Long id, @RequestBody AgencyDTO agencyDTO) {
+        if (!id.equals(agencyDTO.getId())) {
             return ResponseEntity.badRequest().build();
         }
 
-        agencyService.updateAgency(agency);
+        agencyService.updateAgency(agencyDTO);
         return ResponseEntity.noContent().build();
     }
 

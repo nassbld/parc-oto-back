@@ -1,15 +1,21 @@
 package com.bld.parc_oto_back.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
-@Table(name = "vehicles")
+@Table(name = "agencies")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Agency {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,4 +25,8 @@ public class Agency {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL)
+    private List<Vehicle> vehicles;
+
 }

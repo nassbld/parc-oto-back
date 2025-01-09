@@ -1,7 +1,9 @@
 package com.bld.parc_oto_back.application;
 
 import com.bld.parc_oto_back.domain.Vehicle;
+import com.bld.parc_oto_back.dto.VehicleDTO;
 import com.bld.parc_oto_back.infrastructure.VehicleRepository;
+import com.bld.parc_oto_back.infrastructure.mapper.VehicleMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,6 +25,9 @@ class VehicleServiceTest {
     @InjectMocks
     private VehicleService vehicleService;
 
+    @InjectMocks
+    private VehicleMapper vehicleMapper;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -34,7 +39,7 @@ class VehicleServiceTest {
         vehicle.setId(1L);
         when(vehicleRepository.findById(1L)).thenReturn(Optional.of(vehicle));
 
-        Optional<Vehicle> result = vehicleService.getVehicleById(1L);
+        Optional<VehicleDTO> result = vehicleService.getVehicleById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(1L, result.get().getId());
@@ -45,7 +50,7 @@ class VehicleServiceTest {
         List<Vehicle> vehicles = Arrays.asList(new Vehicle(), new Vehicle());
         when(vehicleRepository.findAll()).thenReturn(vehicles);
 
-        List<Vehicle> result = vehicleService.getAllVehicles();
+        List<VehicleDTO> result = vehicleService.getAllVehicles();
 
         assertEquals(2, result.size());
     }
@@ -54,7 +59,9 @@ class VehicleServiceTest {
     void addVehicle_shouldSaveVehicle() {
         Vehicle vehicle = new Vehicle();
 
-        vehicleService.addVehicle(vehicle);
+        VehicleDTO vehicleDTO = vehicleMapper.toDto(vehicle);
+
+        vehicleService.addVehicle(vehicleDTO);
 
         verify(vehicleRepository).save(vehicle);
     }

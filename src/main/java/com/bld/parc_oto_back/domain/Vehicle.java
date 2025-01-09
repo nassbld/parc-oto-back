@@ -24,7 +24,12 @@ public class Vehicle {
     @Column(nullable = false)
     private String brand;
 
-    @Enumerated(EnumType.STRING) // Sauvegarde en texte (e.g., "AVAILABLE")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VehicleStatus status;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "agency_id", nullable = false)
+    private Agency agency;
+
 }

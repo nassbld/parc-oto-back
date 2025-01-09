@@ -2,31 +2,40 @@ package com.bld.parc_oto_back.application;
 
 import com.bld.parc_oto_back.domain.Reservation;
 import com.bld.parc_oto_back.domain.enums.ReservationStatus;
+import com.bld.parc_oto_back.dto.ReservationDTO;
 import com.bld.parc_oto_back.infrastructure.ReservationRepository;
+import com.bld.parc_oto_back.infrastructure.mapper.ReservationMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
     private final ReservationRepository reservationRepository;
+    private final ReservationMapper reservationMapper;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationRepository reservationRepository, ReservationMapper reservationMapper) {
         this.reservationRepository = reservationRepository;
+        this.reservationMapper = reservationMapper;
     }
 
-    public Optional<Reservation> getReservationById(Long id) {
-        return reservationRepository.findById(id);
+    public Optional<ReservationDTO> getReservationById(Long id) {
+        return reservationRepository.findById(id)
+                .map(reservationMapper::toDto);
     }
 
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationDTO> getAllReservations() {
+        return reservationRepository.findAll().stream()
+                .map(reservationMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Reservation createReservation(Reservation reservation) {
+    public ReservationDTO createReservation(ReservationDTO reservationDTO) {
+        Reservation reservation = reservationMapper.toEntity(reservationDTO);
         reservationRepository.save(reservation);
-        return reservation;
+        return reservationMapper.toDto(reservation);
     }
 
     public void deleteReservation(Long id) {
@@ -39,6 +48,4 @@ public class ReservationService {
         reservation.setStatus(ReservationStatus.valueOf(status));
         reservationRepository.save(reservation);
     }
-
-
 }

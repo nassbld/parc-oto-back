@@ -3,6 +3,8 @@ package com.bld.parc_oto_back.exposition;
 import com.bld.parc_oto_back.application.ReportService;
 import com.bld.parc_oto_back.domain.Report;
 import com.bld.parc_oto_back.domain.enums.ReportType;
+import com.bld.parc_oto_back.dto.ReportDTO;
+import com.bld.parc_oto_back.infrastructure.mapper.ReportMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ class ReportControllerTest {
     @MockBean
     private ReportService reportService;
 
+    @MockBean
+    private ReportMapper reportMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -40,7 +45,7 @@ class ReportControllerTest {
         report.setType(ReportType.DAMAGE);
         report.setReportDateTime(LocalDateTime.now());
 
-        when(reportService.getReportById(1L)).thenReturn(Optional.of(report));
+        when(reportService.getReportById(1L)).thenReturn(Optional.of(report).map(reportMapper::toDto));
 
         mockMvc.perform(get("/reports/1"))
                 .andExpect(status().isOk())
@@ -69,7 +74,7 @@ class ReportControllerTest {
                         .content(objectMapper.writeValueAsString(report)))
                 .andExpect(status().isNoContent());
 
-        verify(reportService, times(1)).createReport(eq(1L), any(Report.class));
+        verify(reportService, times(1)).createReport(eq(1L), any(ReportDTO.class));
     }
 
     @Test

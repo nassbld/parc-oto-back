@@ -3,8 +3,10 @@ package com.bld.parc_oto_back.application;
 import com.bld.parc_oto_back.domain.Report;
 import com.bld.parc_oto_back.domain.Reservation;
 import com.bld.parc_oto_back.domain.enums.ReportType;
+import com.bld.parc_oto_back.dto.ReportDTO;
 import com.bld.parc_oto_back.infrastructure.ReportRepository;
 import com.bld.parc_oto_back.infrastructure.ReservationRepository;
+import com.bld.parc_oto_back.infrastructure.mapper.ReportMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,6 +32,9 @@ class ReportServiceTest {
     @InjectMocks
     private ReportService reportService;
 
+    @InjectMocks
+    private ReportMapper reportMapper;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -41,7 +46,7 @@ class ReportServiceTest {
         report.setId(1L);
         when(reportRepository.findById(1L)).thenReturn(Optional.of(report));
 
-        Optional<Report> result = reportService.getReportById(1L);
+        Optional<ReportDTO> result = reportService.getReportById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(1L, result.get().getId());
@@ -52,7 +57,7 @@ class ReportServiceTest {
         List<Report> reports = Arrays.asList(new Report(), new Report());
         when(reportRepository.findAll()).thenReturn(reports);
 
-        List<Report> result = reportService.getAllReports();
+        List<ReportDTO> result = reportService.getAllReports();
 
         assertEquals(2, result.size());
     }
@@ -70,7 +75,9 @@ class ReportServiceTest {
 
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
 
-        reportService.createReport(reservationId, report);
+        ReportDTO reportDTO = reportMapper.toDto(report);
+
+        reportService.createReport(reservationId, reportDTO);
 
         verify(reservationRepository).findById(reservationId);
         verify(reportRepository).save(report);
@@ -84,7 +91,9 @@ class ReportServiceTest {
 
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> reportService.createReport(reservationId, report));
+        ReportDTO reportDTO = reportMapper.toDto(report);
+
+        assertThrows(IllegalArgumentException.class, () -> reportService.createReport(reservationId, reportDTO));
 
         verify(reservationRepository).findById(reservationId);
         verify(reportRepository, never()).save(any(Report.class));

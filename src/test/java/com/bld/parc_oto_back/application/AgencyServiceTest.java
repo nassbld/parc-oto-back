@@ -2,7 +2,9 @@ package com.bld.parc_oto_back.application;
 
 import com.bld.parc_oto_back.domain.Address;
 import com.bld.parc_oto_back.domain.Agency;
+import com.bld.parc_oto_back.dto.AgencyDTO;
 import com.bld.parc_oto_back.infrastructure.AgencyRepository;
+import com.bld.parc_oto_back.infrastructure.mapper.AgencyMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,9 @@ class AgencyServiceTest {
     private AgencyRepository agencyRepository;
 
     @InjectMocks
+    private AgencyMapper agencyMapper;
+
+    @InjectMocks
     private AgencyService agencyService;
 
     @BeforeEach
@@ -36,7 +41,7 @@ class AgencyServiceTest {
         agency.setId(1L);
         when(agencyRepository.findById(1L)).thenReturn(Optional.of(agency));
 
-        Optional<Agency> result = agencyService.getAgencyById(1L);
+        Optional<AgencyDTO> result = agencyService.getAgencyById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(1L, result.get().getId());
@@ -47,7 +52,7 @@ class AgencyServiceTest {
         List<Agency> agencies = Arrays.asList(new Agency(), new Agency());
         when(agencyRepository.findAll()).thenReturn(agencies);
 
-        List<Agency> result = agencyService.getAllAgencies();
+        List<AgencyDTO> result = agencyService.getAllAgencies();
 
         assertEquals(2, result.size());
     }
@@ -55,7 +60,8 @@ class AgencyServiceTest {
     @Test
     void createAgency_shouldSaveAgency() {
         Agency agency = new Agency();
-        agencyService.createAgency(agency);
+        AgencyDTO agencyDTO = agencyMapper.toDto(agency);
+        agencyService.createAgency(agencyDTO);
 
         verify(agencyRepository, times(1)).save(agency);
     }
@@ -81,7 +87,9 @@ class AgencyServiceTest {
 
         when(agencyRepository.findById(1L)).thenReturn(Optional.of(existingAgency));
 
-        agencyService.updateAgency(updatedAgency);
+        AgencyDTO updatedAgencyDTO = agencyMapper.toDto(updatedAgency);
+
+        agencyService.updateAgency(updatedAgencyDTO);
 
         verify(agencyRepository, times(1)).save(existingAgency);
         assertEquals("New Name", existingAgency.getName());
@@ -97,6 +105,8 @@ class AgencyServiceTest {
 
         when(agencyRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> agencyService.updateAgency(agency));
+        AgencyDTO agencyDTO = agencyMapper.toDto(agency);
+
+        assertThrows(EntityNotFoundException.class, () -> agencyService.updateAgency(agencyDTO));
     }
 }

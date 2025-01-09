@@ -2,8 +2,10 @@ package com.bld.parc_oto_back.application;
 
 import com.bld.parc_oto_back.domain.Reservation;
 import com.bld.parc_oto_back.domain.enums.ReservationStatus;
+import com.bld.parc_oto_back.dto.ReservationDTO;
 import com.bld.parc_oto_back.infrastructure.ReservationRepository;
 import com.bld.parc_oto_back.infrastructure.VehicleRepository;
+import com.bld.parc_oto_back.infrastructure.mapper.ReservationMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,13 +32,16 @@ public class ReservationServiceTest {
     @InjectMocks
     private ReservationService reservationService;
 
+    @InjectMocks
+    private ReservationMapper reservationMapper;
+
     @Test
     public void testGetReservationById_Success() {
         Reservation reservation = new Reservation();
         reservation.setId(1L);
         when(reservationRepository.findById(1L)).thenReturn(Optional.of(reservation));
 
-        Optional<Reservation> result = reservationService.getReservationById(1L);
+        Optional<ReservationDTO> result = reservationService.getReservationById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(1L, result.get().getId());
@@ -48,7 +53,7 @@ public class ReservationServiceTest {
         List<Reservation> reservations = Arrays.asList(new Reservation(), new Reservation());
         when(reservationRepository.findAll()).thenReturn(reservations);
 
-        List<Reservation> result = reservationService.getAllReservations();
+        List<ReservationDTO> result = reservationService.getAllReservations();
 
         assertEquals(2, result.size());
         verify(reservationRepository, times(1)).findAll();
@@ -62,10 +67,12 @@ public class ReservationServiceTest {
 
         when(reservationRepository.save(any(Reservation.class))).thenReturn(reservation);
 
-        Reservation result = reservationService.createReservation(reservation);
+        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
+
+        ReservationDTO result = reservationService.createReservation(reservationDTO);
 
         assertNotNull(result, "Reservation should not be null");
-        assertEquals(ReservationStatus.PENDING, result.getStatus(), "Reservation status should be PENDING");
+        assertEquals(ReservationStatus.PENDING.toString(), result.getStatus(), "Reservation status should be PENDING");
         verify(reservationRepository, times(1)).save(any(Reservation.class));
     }
 

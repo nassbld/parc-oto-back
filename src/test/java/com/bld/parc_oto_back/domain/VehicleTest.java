@@ -8,7 +8,11 @@ class VehicleTest {
 
     @Test
     void testVehicleCreation() {
-        Vehicle vehicle = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE);
+        Agency testAgency = new Agency();
+        testAgency.setId(1L);
+        testAgency.setName("Test Agency");
+
+        Vehicle vehicle = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE, testAgency);
 
         assertEquals(1L, vehicle.getId());
         assertEquals("ABC123", vehicle.getLicense_plate());

@@ -2,6 +2,7 @@ package com.bld.parc_oto_back.exposition;
 
 import com.bld.parc_oto_back.application.ReservationService;
 import com.bld.parc_oto_back.domain.Reservation;
+import com.bld.parc_oto_back.dto.ReservationDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,22 +19,21 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reservation>> getAllReservations() {
-        List<Reservation> reservations = reservationService.getAllReservations();
+    public ResponseEntity<List<ReservationDTO>> getAllReservations() {
+        List<ReservationDTO> reservations = reservationService.getAllReservations();
         return ResponseEntity.ok(reservations);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
+    public ResponseEntity<ReservationDTO> getReservationById(@PathVariable Long id) {
         return reservationService.getReservationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        reservationService.createReservation(reservation);
+    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationDTO reservationDTO) {
+        reservationService.createReservation(reservationDTO);
         return ResponseEntity.noContent().build();
     }
 

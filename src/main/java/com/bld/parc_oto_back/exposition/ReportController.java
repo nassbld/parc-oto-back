@@ -2,7 +2,7 @@ package com.bld.parc_oto_back.exposition;
 
 import com.bld.parc_oto_back.application.ReportService;
 import com.bld.parc_oto_back.domain.Report;
-import org.springframework.http.HttpStatus;
+import com.bld.parc_oto_back.dto.ReportDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +17,15 @@ public class ReportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Report> getReportById(@PathVariable Long id) {
+    public ResponseEntity<ReportDTO> getReportById(@PathVariable Long id) {
         return reportService.getReportById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{reservationId}")
-    public ResponseEntity<Report> createReport(@PathVariable Long reservationId, @RequestBody Report report) {
-        reportService.createReport(reservationId, report);
+    public ResponseEntity<Report> createReport(@PathVariable Long reservationId, @RequestBody ReportDTO reportDTO) {
+        reportService.createReport(reservationId, reportDTO);
         return ResponseEntity.noContent().build();
     }
 

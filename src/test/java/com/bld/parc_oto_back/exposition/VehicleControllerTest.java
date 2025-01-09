@@ -1,8 +1,11 @@
 package com.bld.parc_oto_back.exposition;
 
 import com.bld.parc_oto_back.application.VehicleService;
+import com.bld.parc_oto_back.domain.Agency;
 import com.bld.parc_oto_back.domain.Vehicle;
 import com.bld.parc_oto_back.domain.enums.VehicleStatus;
+import com.bld.parc_oto_back.dto.VehicleDTO;
+import com.bld.parc_oto_back.infrastructure.mapper.VehicleMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +31,23 @@ class VehicleControllerTest {
     @MockBean
     private VehicleService vehicleService;
 
+    @MockBean
+    private VehicleMapper vehicleMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     void getAllVehicles_shouldReturnListOfVehicles() throws Exception {
-        Vehicle vehicle1 = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE);
-        Vehicle vehicle2 = new Vehicle(2L, "DEF456", "Civic", "Honda", VehicleStatus.UNDER_MAINTENANCE);
-        when(vehicleService.getAllVehicles()).thenReturn(Arrays.asList(vehicle1, vehicle2));
+        Agency testAgency = new Agency();
+        testAgency.setId(1L);
+        testAgency.setName("Test Agency");
+
+        Vehicle vehicle1 = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE, testAgency);
+        Vehicle vehicle2 = new Vehicle(2L, "DEF456", "Civic", "Honda", VehicleStatus.UNDER_MAINTENANCE, testAgency);
+        VehicleDTO vehicleDTO1 = vehicleMapper.toDto(vehicle1);
+        VehicleDTO vehicleDTO2 = vehicleMapper.toDto(vehicle2);
+        when(vehicleService.getAllVehicles()).thenReturn(Arrays.asList(vehicleDTO1, vehicleDTO2));
 
         mockMvc.perform(get("/vehicles"))
                 .andExpect(status().isOk())
@@ -46,8 +58,13 @@ class VehicleControllerTest {
 
     @Test
     void getVehicleById_shouldReturnVehicle_whenVehicleExists() throws Exception {
-        Vehicle vehicle = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE);
-        when(vehicleService.getVehicleById(1L)).thenReturn(Optional.of(vehicle));
+        Agency testAgency = new Agency();
+        testAgency.setId(1L);
+        testAgency.setName("Test Agency");
+
+        Vehicle vehicle = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE, testAgency);
+        VehicleDTO vehicleDTO = vehicleMapper.toDto(vehicle);
+        when(vehicleService.getVehicleById(1L)).thenReturn(Optional.of(vehicleDTO));
 
         mockMvc.perform(get("/vehicles/1"))
                 .andExpect(status().isOk())
@@ -68,14 +85,18 @@ class VehicleControllerTest {
 
     @Test
     void createVehicle_shouldReturnNoContent() throws Exception {
-        Vehicle vehicle = new Vehicle(null, "GHI789", "Corolla", "Toyota", VehicleStatus.AVAILABLE);
+        Agency testAgency = new Agency();
+        testAgency.setId(1L);
+        testAgency.setName("Test Agency");
+
+        Vehicle vehicle = new Vehicle(null, "GHI789", "Corolla", "Toyota", VehicleStatus.AVAILABLE, testAgency);
 
         mockMvc.perform(post("/vehicles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(vehicle)))
                 .andExpect(status().isNoContent());
 
-        verify(vehicleService, times(1)).addVehicle(any(Vehicle.class));
+        verify(vehicleService, times(1)).addVehicle(any(VehicleDTO.class));
     }
 
     @Test

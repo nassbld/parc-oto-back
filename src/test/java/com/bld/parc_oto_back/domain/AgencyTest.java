@@ -1,6 +1,9 @@
 package com.bld.parc_oto_back.domain;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AgencyTest {
@@ -8,7 +11,7 @@ class AgencyTest {
     @Test
     void testAgencyCreation() {
         Address address = new Address("123 Main St", "12345", "City", "Country");
-        Agency agency = new Agency(1L, address, "Test Agency");
+        Agency agency = new Agency(1L, address, "Test Agency", new ArrayList<>());
 
         assertEquals(1L, agency.getId());
         assertEquals(address, agency.getAddress());

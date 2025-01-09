@@ -2,6 +2,8 @@ package com.bld.parc_oto_back.exposition;
 
 import com.bld.parc_oto_back.application.UserService;
 import com.bld.parc_oto_back.domain.User;
+import com.bld.parc_oto_back.dto.UserDTO;
+import com.bld.parc_oto_back.infrastructure.mapper.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private UserMapper userMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -39,7 +44,9 @@ class UserControllerTest {
         user.setEmail("john.doe@example.com");
         user.setPhone("1234567890");
 
-        when(userService.getUserById(1L)).thenReturn(Optional.of(user));
+        UserDTO userDTO = userMapper.toDto(user);
+
+        when(userService.getUserById(1L)).thenReturn(Optional.of(userDTO));
 
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
@@ -76,7 +83,9 @@ class UserControllerTest {
         createdUser.setEmail("jane.smith@example.com");
         createdUser.setPhone("0987654321");
 
-        when(userService.createUser(any(User.class))).thenReturn(createdUser);
+        UserDTO createdUserDTO = userMapper.toDto(createdUser);
+
+        when(userService.createUser(any(UserDTO.class))).thenReturn(createdUserDTO);
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -3,6 +3,8 @@ package com.bld.parc_oto_back.exposition;
 import com.bld.parc_oto_back.application.ReservationService;
 import com.bld.parc_oto_back.domain.Reservation;
 import com.bld.parc_oto_back.domain.enums.ReservationStatus;
+import com.bld.parc_oto_back.dto.ReservationDTO;
+import com.bld.parc_oto_back.infrastructure.mapper.ReservationMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ class ReservationControllerTest {
     @MockBean
     private ReservationService reservationService;
 
+    @MockBean
+    private ReservationMapper reservationMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -36,7 +41,9 @@ class ReservationControllerTest {
     void getAllReservations_shouldReturnListOfReservations() throws Exception {
         Reservation reservation1 = new Reservation();
         Reservation reservation2 = new Reservation();
-        when(reservationService.getAllReservations()).thenReturn(Arrays.asList(reservation1, reservation2));
+        ReservationDTO reservationDTO1 = reservationMapper.toDto(reservation1);
+        ReservationDTO reservationDTO2 = reservationMapper.toDto(reservation2);
+        when(reservationService.getAllReservations()).thenReturn(Arrays.asList(reservationDTO1, reservationDTO2));
 
         mockMvc.perform(get("/reservations"))
                 .andExpect(status().isOk())
@@ -47,7 +54,10 @@ class ReservationControllerTest {
     void getReservationById_shouldReturnReservation_whenReservationExists() throws Exception {
         Reservation reservation = new Reservation();
         reservation.setId(1L);
-        when(reservationService.getReservationById(1L)).thenReturn(Optional.of(reservation));
+
+        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
+
+        when(reservationService.getReservationById(1L)).thenReturn(Optional.of(reservationDTO));
 
         mockMvc.perform(get("/reservations/1"))
                 .andExpect(status().isOk())
@@ -73,7 +83,7 @@ class ReservationControllerTest {
                         .content(objectMapper.writeValueAsString(reservation)))
                 .andExpect(status().isNoContent());
 
-        verify(reservationService, times(1)).createReservation(any(Reservation.class));
+        verify(reservationService, times(1)).createReservation(any(ReservationDTO.class));
     }
 
     @Test
