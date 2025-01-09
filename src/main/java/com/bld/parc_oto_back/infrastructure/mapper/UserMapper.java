@@ -3,9 +3,17 @@ package com.bld.parc_oto_back.infrastructure.mapper;
 import com.bld.parc_oto_back.domain.User;
 import com.bld.parc_oto_back.dto.UserDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserDTO toDto(User entity);
-    User toEntity(UserDTO dto);
+
+    @Mapping(target = "lastName", source = "last_name")
+    @Mapping(target = "firstName", source = "first_name")
+    UserDTO toDto(User user);
+
+    @Mapping(target = "last_name", source = "lastName")
+    @Mapping(target = "first_name", source = "firstName")
+    User toEntity(UserDTO userDTO);
 }
+
