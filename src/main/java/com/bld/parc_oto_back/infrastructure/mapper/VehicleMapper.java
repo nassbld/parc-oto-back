@@ -8,12 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface VehicleMapper {
 
-    @Mapping(target = "licensePlate", source = "license_plate")
-    @Mapping(target = "agencyId", source = "agency.id")
+    @Mapping(target = "agencyId", expression = "java(vehicle.getAgency().getId())")
+    @Mapping(target = "vehicleTypeId", expression = "java(vehicle.getType().getId())")
     VehicleDTO toDto(Vehicle vehicle);
 
-    @Mapping(target = "license_plate", source = "licensePlate")
-    @Mapping(target = "agency", ignore = true)
+    @Mapping(target = "agency.id", source = "agencyId")
+    @Mapping(target = "type.id", source = "vehicleTypeId")
     Vehicle toEntity(VehicleDTO vehicleDTO);
 }
 

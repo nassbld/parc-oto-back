@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,8 +14,9 @@ import lombok.Setter;
 public class VehicleDTO {
     private Long id;
     private String licensePlate;
-    private String model;
-    private String brand;
+    private Long vehicleTypeId;
     private String status;
     private Long agencyId;
+    private LocalDateTime endInsurance;
+    private LocalDateTime endTechnicalControl;
 }

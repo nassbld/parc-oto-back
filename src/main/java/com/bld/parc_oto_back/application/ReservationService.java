@@ -26,6 +26,12 @@ public class ReservationService {
                 .map(reservationMapper::toDto);
     }
 
+    public List<ReservationDTO> getReservationByAgencyId(Long agencyId) {
+        return reservationRepository.findByAgencyId(agencyId).stream()
+                .map(reservationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public List<ReservationDTO> getAllReservations() {
         return reservationRepository.findAll().stream()
                 .map(reservationMapper::toDto)

@@ -74,7 +74,7 @@ class ReportControllerTest {
                         .content(objectMapper.writeValueAsString(report)))
                 .andExpect(status().isNoContent());
 
-        verify(reportService, times(1)).createReport(eq(1L), any(ReportDTO.class));
+        verify(reportService, times(1)).createReport(any(ReportDTO.class));
     }
 
     @Test

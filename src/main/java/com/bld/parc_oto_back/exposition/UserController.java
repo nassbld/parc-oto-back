@@ -1,7 +1,6 @@
 package com.bld.parc_oto_back.exposition;
 
 import com.bld.parc_oto_back.application.UserService;
-import com.bld.parc_oto_back.domain.User;
 import com.bld.parc_oto_back.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -8,14 +8,17 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AgencyMapper {
 
-    @Mapping(target = "street", source = "address.street")
-    @Mapping(target = "postalCode", source = "address.postalCode")
-    @Mapping(target = "city", source = "address.city")
-    @Mapping(target = "country", source = "address.country")
+    @Mapping(target = "street", expression = "java(agency.getAddress().getStreet())")
+    @Mapping(target = "postalCode", expression = "java(agency.getAddress().getPostalCode())")
+    @Mapping(target = "city", expression = "java(agency.getAddress().getCity())")
+    @Mapping(target = "country", expression = "java(agency.getAddress().getCountry())")
     @Mapping(target = "vehicleIds", ignore = true)
     AgencyDTO toDto(Agency agency);
 
-    @Mapping(target = "address", ignore = true)
+    @Mapping(target = "address.street", source = "street")
+    @Mapping(target = "address.postalCode", source = "postalCode")
+    @Mapping(target = "address.city", source = "city")
+    @Mapping(target = "address.country", source = "country")
     @Mapping(target = "vehicles", ignore = true)
     Agency toEntity(AgencyDTO agencyDTO);
 }

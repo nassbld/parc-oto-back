@@ -8,13 +8,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ReservationMapper {
 
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "vehicleId", source = "vehicle.id")
+    @Mapping(target = "userId", expression = "java(reservation.getUser().getId())")
+    @Mapping(target = "vehicleId", expression = "java(reservation.getVehicle().getId())")
     @Mapping(target = "reportIds", ignore = true)
-    ReservationDTO toDto(Reservation entity);
+    ReservationDTO toDto(Reservation reservation);
 
-    @Mapping(target = "user", ignore = true)
-    @Mapping(target = "vehicle", ignore = true)
+    @Mapping(target = "user.id", source = "userId")
+    @Mapping(target = "vehicle.id", source = "vehicleId")
     @Mapping(target = "reports", ignore = true)
     Reservation toEntity(ReservationDTO dto);
 }

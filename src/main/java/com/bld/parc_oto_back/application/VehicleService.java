@@ -25,6 +25,12 @@ public class VehicleService {
                 .map(vehicleMapper::toDto);
     }
 
+    public List<VehicleDTO> getVehiclesByAgencyId(Long agencyId) {
+        return vehicleRepository.findByAgencyId(agencyId).stream()
+                .map(vehicleMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public List<VehicleDTO> getAllVehicles() {
         return vehicleRepository.findAll().stream()
                 .map(vehicleMapper::toDto)

@@ -4,6 +4,8 @@ import com.bld.parc_oto_back.domain.enums.VehicleStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "vehicles")
 @Getter
@@ -16,13 +18,11 @@ public class Vehicle {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String license_plate;
+    private String licensePlate;
 
-    @Column(nullable = false)
-    private String model;
-
-    @Column(nullable = false)
-    private String brand;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_type_id", nullable = false)
+    private VehicleType type;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -32,4 +32,9 @@ public class Vehicle {
     @JoinColumn(name = "agency_id", nullable = false)
     private Agency agency;
 
+    @Column(name = "end_insurance", nullable = false)
+    private LocalDateTime endInsurance;
+
+    @Column(name = "end_technical_control", nullable = false)
+    private LocalDateTime endTechnicalControl;
 }

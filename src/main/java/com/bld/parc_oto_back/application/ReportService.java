@@ -35,12 +35,8 @@ public class ReportService {
                 .collect(Collectors.toList());
     }
 
-    public void createReport(Long reservationId, ReportDTO reportDTO) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("Reservation not found with id: " + reservationId));
-
+    public void createReport(ReportDTO reportDTO) {
         Report report = reportMapper.toEntity(reportDTO);
-        report.setReservation(reservation);
         reportRepository.save(report);
     }
 

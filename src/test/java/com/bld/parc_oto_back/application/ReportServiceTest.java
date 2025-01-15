@@ -77,7 +77,7 @@ class ReportServiceTest {
 
         ReportDTO reportDTO = reportMapper.toDto(report);
 
-        reportService.createReport(reservationId, reportDTO);
+        reportService.createReport(reportDTO);
 
         verify(reservationRepository).findById(reservationId);
         verify(reportRepository).save(report);
@@ -93,7 +93,7 @@ class ReportServiceTest {
 
         ReportDTO reportDTO = reportMapper.toDto(report);
 
-        assertThrows(IllegalArgumentException.class, () -> reportService.createReport(reservationId, reportDTO));
+        assertThrows(IllegalArgumentException.class, () -> reportService.createReport(reportDTO));
 
         verify(reservationRepository).findById(reservationId);
         verify(reportRepository, never()).save(any(Report.class));

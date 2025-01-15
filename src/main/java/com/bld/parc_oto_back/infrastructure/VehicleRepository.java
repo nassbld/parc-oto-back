@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     List<Vehicle> findByStatus(VehicleStatus status);
+    List<Vehicle> findByAgencyId(Long agencyId);
 }

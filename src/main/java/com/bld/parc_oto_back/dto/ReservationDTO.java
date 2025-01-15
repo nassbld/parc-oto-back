@@ -16,8 +16,8 @@ public class ReservationDTO {
     private Long id;
     private Long userId;
     private Long vehicleId;
-    private LocalDateTime debut;
-    private LocalDateTime fin;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private String status;
     private List<Long> reportIds;
 }

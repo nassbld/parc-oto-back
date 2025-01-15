@@ -3,6 +3,7 @@ package com.bld.parc_oto_back.exposition;
 import com.bld.parc_oto_back.application.VehicleService;
 import com.bld.parc_oto_back.domain.Agency;
 import com.bld.parc_oto_back.domain.Vehicle;
+import com.bld.parc_oto_back.domain.VehicleType;
 import com.bld.parc_oto_back.domain.enums.VehicleStatus;
 import com.bld.parc_oto_back.dto.VehicleDTO;
 import com.bld.parc_oto_back.infrastructure.mapper.VehicleMapper;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -43,8 +45,21 @@ class VehicleControllerTest {
         testAgency.setId(1L);
         testAgency.setName("Test Agency");
 
-        Vehicle vehicle1 = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE, testAgency);
-        Vehicle vehicle2 = new Vehicle(2L, "DEF456", "Civic", "Honda", VehicleStatus.UNDER_MAINTENANCE, testAgency);
+        VehicleType type1 = new VehicleType();
+        type1.setId(1L);
+        type1.setBrand("Citroen");
+        type1.setModel("C3");
+        type1.setImageUrl("url_to_c3_image");
+
+        VehicleType type2 = new VehicleType();
+        type2.setId(2L);
+        type2.setBrand("Citroen");
+        type2.setModel("Jumper");
+        type2.setImageUrl("url_to_jumper_image");
+
+        LocalDateTime now = LocalDateTime.now();
+        Vehicle vehicle1 = new Vehicle(1L, "ABC123", type1, VehicleStatus.AVAILABLE, testAgency, now.plusYears(1), now.plusMonths(6));
+        Vehicle vehicle2 = new Vehicle(2L, "DEF456", type2, VehicleStatus.UNDER_MAINTENANCE, testAgency, now.plusYears(1), now.plusMonths(6));
         VehicleDTO vehicleDTO1 = vehicleMapper.toDto(vehicle1);
         VehicleDTO vehicleDTO2 = vehicleMapper.toDto(vehicle2);
         when(vehicleService.getAllVehicles()).thenReturn(Arrays.asList(vehicleDTO1, vehicleDTO2));
@@ -62,16 +77,23 @@ class VehicleControllerTest {
         testAgency.setId(1L);
         testAgency.setName("Test Agency");
 
-        Vehicle vehicle = new Vehicle(1L, "ABC123", "Model X", "Tesla", VehicleStatus.AVAILABLE, testAgency);
+        VehicleType type = new VehicleType();
+        type.setId(1L);
+        type.setBrand("Citroen");
+        type.setModel("C3");
+        type.setImageUrl("url_to_c3_image");
+
+        LocalDateTime now = LocalDateTime.now();
+        Vehicle vehicle = new Vehicle(1L, "ABC123", type, VehicleStatus.AVAILABLE, testAgency, now.plusYears(1), now.plusMonths(6));
         VehicleDTO vehicleDTO = vehicleMapper.toDto(vehicle);
         when(vehicleService.getVehicleById(1L)).thenReturn(Optional.of(vehicleDTO));
 
         mockMvc.perform(get("/vehicles/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.license_plate").value("ABC123"))
-                .andExpect(jsonPath("$.model").value("Model X"))
-                .andExpect(jsonPath("$.brand").value("Tesla"))
+                .andExpect(jsonPath("$.licensePlate").value("ABC123"))
+                .andExpect(jsonPath("$.vehicleType.brand").value("Citroen"))
+                .andExpect(jsonPath("$.vehicleType.model").value("C3"))
                 .andExpect(jsonPath("$.status").value("AVAILABLE"));
     }
 
@@ -89,7 +111,14 @@ class VehicleControllerTest {
         testAgency.setId(1L);
         testAgency.setName("Test Agency");
 
-        Vehicle vehicle = new Vehicle(null, "GHI789", "Corolla", "Toyota", VehicleStatus.AVAILABLE, testAgency);
+        VehicleType type = new VehicleType();
+        type.setId(1L);
+        type.setBrand("Citroen");
+        type.setModel("C3");
+        type.setImageUrl("url_to_c3_image");
+
+        LocalDateTime now = LocalDateTime.now();
+        Vehicle vehicle = new Vehicle(1L, "ABC123", type, VehicleStatus.AVAILABLE, testAgency, now.plusYears(1), now.plusMonths(6));
 
         mockMvc.perform(post("/vehicles")
                         .contentType(MediaType.APPLICATION_JSON)

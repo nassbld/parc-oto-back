@@ -24,8 +24,8 @@ public class ReportController {
     }
 
     @PostMapping("/{reservationId}")
-    public ResponseEntity<Report> createReport(@PathVariable Long reservationId, @RequestBody ReportDTO reportDTO) {
-        reportService.createReport(reservationId, reportDTO);
+    public ResponseEntity<Report> createReport(@RequestBody ReportDTO reportDTO) {
+        reportService.createReport(reportDTO);
         return ResponseEntity.noContent().build();
     }
 

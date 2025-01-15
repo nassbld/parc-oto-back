@@ -24,8 +24,8 @@ class ReservationTest {
         assertEquals(1L, reservation.getId());
         assertEquals(user, reservation.getUser());
         assertEquals(vehicle, reservation.getVehicle());
-        assertEquals(debut, reservation.getDebut());
-        assertEquals(fin, reservation.getFin());
+        assertEquals(debut, reservation.getStart());
+        assertEquals(fin, reservation.getEnd());
         assertEquals(ReservationStatus.PENDING, reservation.getStatus());
         assertEquals(reports, reservation.getReports());
     }
@@ -37,8 +37,8 @@ class ReservationTest {
         assertNull(reservation.getId());
         assertNull(reservation.getUser());
         assertNull(reservation.getVehicle());
-        assertNull(reservation.getDebut());
-        assertNull(reservation.getFin());
+        assertNull(reservation.getStart());
+        assertNull(reservation.getEnd());
         assertNull(reservation.getStatus());
         assertNull(reservation.getReports());
     }
@@ -55,16 +55,16 @@ class ReservationTest {
         reservation.setId(2L);
         reservation.setUser(user);
         reservation.setVehicle(vehicle);
-        reservation.setDebut(debut);
-        reservation.setFin(fin);
+        reservation.setStart(debut);
+        reservation.setEnd(fin);
         reservation.setStatus(ReservationStatus.CONFIRMED);
         reservation.setReports(reports);
 
         assertEquals(2L, reservation.getId());
         assertEquals(user, reservation.getUser());
         assertEquals(vehicle, reservation.getVehicle());
-        assertEquals(debut, reservation.getDebut());
-        assertEquals(fin, reservation.getFin());
+        assertEquals(debut, reservation.getStart());
+        assertEquals(fin, reservation.getEnd());
         assertEquals(ReservationStatus.CONFIRMED, reservation.getStatus());
         assertEquals(reports, reservation.getReports());
     }

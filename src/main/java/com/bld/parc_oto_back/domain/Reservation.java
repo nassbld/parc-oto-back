@@ -27,10 +27,10 @@ public class Reservation {
     private Vehicle vehicle;
 
     @Column(nullable = false)
-    private LocalDateTime debut;
+    private LocalDateTime start;
 
     @Column(nullable = false)
-    private LocalDateTime fin;
+    private LocalDateTime end;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

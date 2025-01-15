@@ -75,8 +75,8 @@ class ReservationControllerTest {
     @Test
     void createReservation_shouldReturnNoContent() throws Exception {
         Reservation reservation = new Reservation();
-        reservation.setDebut(LocalDateTime.now());
-        reservation.setFin(LocalDateTime.now().plusDays(1));
+        reservation.setStart(LocalDateTime.now());
+        reservation.setEnd(LocalDateTime.now().plusDays(1));
 
         mockMvc.perform(post("/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
