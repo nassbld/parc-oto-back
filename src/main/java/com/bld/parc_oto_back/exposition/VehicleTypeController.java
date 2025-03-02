@@ -32,6 +32,12 @@ public class VehicleTypeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/brand")
+    public ResponseEntity<List<VehicleTypeDTO>> getVehicleTypeByBrand(@RequestParam String brand) {
+        List<VehicleTypeDTO> vehicleTypes = vehicleTypeService.getVehicleTypeByBrand(brand);
+        return ResponseEntity.ok(vehicleTypes);
+    }
+
     @PostMapping
     public ResponseEntity<VehicleTypeDTO> createVehicleType(@RequestBody VehicleTypeDTO vehicleTypeDTO) {
         VehicleTypeDTO createdVehicleType = vehicleTypeService.createVehicleType(vehicleTypeDTO);
@@ -40,9 +46,8 @@ public class VehicleTypeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<VehicleTypeDTO> updateVehicleType(@PathVariable Long id, @RequestBody VehicleTypeDTO vehicleTypeDTO) {
-        return vehicleTypeService.updateVehicleType(id, vehicleTypeDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        vehicleTypeService.updateVehicleType(id, vehicleTypeDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

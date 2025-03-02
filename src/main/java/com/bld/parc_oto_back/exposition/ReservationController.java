@@ -4,6 +4,7 @@ import com.bld.parc_oto_back.application.AgencyService;
 import com.bld.parc_oto_back.application.ReservationService;
 import com.bld.parc_oto_back.domain.Reservation;
 import com.bld.parc_oto_back.dto.ReservationDTO;
+import com.bld.parc_oto_back.dto.ReservationWithInfosDTO;
 import com.bld.parc_oto_back.dto.VehicleDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,19 @@ public class ReservationController {
 
     @GetMapping("/agency/{id}")
     public ResponseEntity<List<ReservationDTO>> getReservationByAgencyId(@PathVariable Long id) {
-        List<ReservationDTO> reservations = reservationService.getReservationByAgencyId(id);
+        List<ReservationDTO> reservations = reservationService.getReservationsByAgencyId(id);
+        return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/agency/informations/{id}")
+    public ResponseEntity<List<ReservationWithInfosDTO>> getReservationsWithInformationsByAgencyId(@PathVariable Long id) {
+        List<ReservationWithInfosDTO> reservations = reservationService.getReservationsWithInformationsByAgencyId(id);
+        return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/agency/today/{id}")
+    public ResponseEntity<List<ReservationDTO>> getTodayReservationsByAgencyId(@PathVariable Long id) {
+        List<ReservationDTO> reservations = reservationService.getTodayReservationsByAgencyId(id);
         return ResponseEntity.ok(reservations);
     }
 

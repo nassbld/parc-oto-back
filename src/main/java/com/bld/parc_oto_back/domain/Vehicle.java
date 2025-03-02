@@ -37,4 +37,17 @@ public class Vehicle {
 
     @Column(name = "end_technical_control", nullable = false)
     private LocalDateTime endTechnicalControl;
+
+    @Column(name = "deleted")
+    private boolean isDeleted = false;
+
+    public Vehicle(Long id, String licensePlate, VehicleType type, VehicleStatus status, Agency agency, LocalDateTime endInsurance, LocalDateTime endTechnicalControl) {
+        this.id = id;
+        this.licensePlate = licensePlate;
+        this.type = type;
+        this.status = status;
+        this.agency = agency;
+        this.endInsurance = endInsurance;
+        this.endTechnicalControl = endTechnicalControl;
+    }
 }

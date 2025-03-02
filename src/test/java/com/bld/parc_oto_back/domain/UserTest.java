@@ -7,7 +7,7 @@ class UserTest {
 
     @Test
     void testUserCreation() {
-        User user = new User(1L, "M123", "Doe", "John", "john.doe@example.com", "1234567890");
+        User user = new User(1L, "M123", "Doe", "John", "john.doe@example.com", "1234567890", "123");
 
         assertEquals(1L, user.getId());
         assertEquals("M123", user.getMatricule());

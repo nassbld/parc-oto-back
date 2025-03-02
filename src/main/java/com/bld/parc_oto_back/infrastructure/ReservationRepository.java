@@ -15,4 +15,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r WHERE r.vehicle.agency.id = :agencyId")
     List<Reservation> findByAgencyId(@Param("agencyId") Long agencyId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.vehicle.agency.id = :agencyId AND DATE(r.start) = CURRENT_DATE")
+    List<Reservation> findTodayByAgencyId(@Param("agencyId") Long agencyId);
 }

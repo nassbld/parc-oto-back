@@ -4,6 +4,7 @@ import com.bld.parc_oto_back.domain.VehicleType;
 import com.bld.parc_oto_back.dto.VehicleTypeDTO;
 import com.bld.parc_oto_back.infrastructure.VehicleTypeRepository;
 import com.bld.parc_oto_back.infrastructure.mapper.VehicleTypeMapper;
+import io.micrometer.observation.ObservationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,12 @@ public class VehicleTypeService {
                 .collect(Collectors.toList());
     }
 
+    public List<VehicleTypeDTO> getVehicleTypeByBrand(String brand) {
+        return vehicleTypeRepository.findByBrand(brand).stream()
+                .map(vehicleTypeMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public Optional<VehicleTypeDTO> getVehicleTypeById(Long id) {
         return vehicleTypeRepository.findById(id)
                 .map(vehicleTypeMapper::toDTO);
@@ -40,13 +47,16 @@ public class VehicleTypeService {
         return vehicleTypeMapper.toDTO(savedVehicleType);
     }
 
-    public Optional<VehicleTypeDTO> updateVehicleType(Long id, VehicleTypeDTO vehicleTypeDTO) {
-        return vehicleTypeRepository.findById(id)
-                .map(existingVehicleType -> {
-                    VehicleType updatedVehicleType = vehicleTypeMapper.toEntity(vehicleTypeDTO);
-                    updatedVehicleType.setId(existingVehicleType.getId());
-                    return vehicleTypeMapper.toDTO(vehicleTypeRepository.save(updatedVehicleType));
-                });
+    public VehicleTypeDTO updateVehicleType(Long id, VehicleTypeDTO vehicleTypeDTO) {
+        VehicleType existingVehicleType = vehicleTypeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("VehicleType not found with id:" + id));
+
+        existingVehicleType.setBrand(vehicleTypeDTO.getBrand());
+        existingVehicleType.setModel(vehicleTypeDTO.getModel());
+        existingVehicleType.setImageUrl(vehicleTypeDTO.getImageUrl());
+
+        VehicleType updatedVehicleType = vehicleTypeRepository.save(existingVehicleType);
+        return vehicleTypeMapper.toDTO(updatedVehicleType);
     }
 
     public void deleteVehicleType(Long id) {
