@@ -6,6 +6,8 @@ import com.bld.parc_oto_back.dto.AgencyDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/agencies")
 public class AgencyController {
@@ -16,11 +18,23 @@ public class AgencyController {
         this.agencyService = agencyService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<AgencyDTO>> getAllAgencies() {
+        List<AgencyDTO> agencies = agencyService.getAllAgencies();
+        return ResponseEntity.ok(agencies);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<AgencyDTO> getAgencyById(@PathVariable Long id) {
         return agencyService.getAgencyById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/by-ids")
+    public ResponseEntity<List<AgencyDTO>> getAgenciesByIds(@RequestBody List<Long> agencyIds) {
+        List<AgencyDTO> agencies = agencyService.getAgenciesByIds(agencyIds);
+        return ResponseEntity.ok(agencies);
     }
 
     @PostMapping

@@ -13,3 +13,7 @@ spring:
 
 jwt:
   secret: ImSfxv7llsf234w8tr3FtvVgbREyb054aDsWV1hvPCI=
+
+logging:
+  level:
+    org.springframework.security: DEBUG

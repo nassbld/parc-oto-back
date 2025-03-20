@@ -26,6 +26,13 @@ public class AgencyService {
                 .map(agencyMapper::toDto);
     }
 
+    public List<AgencyDTO> getAgenciesByIds(List<Long> agencyIds) {
+        return agencyRepository.findAllById(agencyIds)
+                .stream()
+                .map(agencyMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public List<AgencyDTO> getAllAgencies() {
         return agencyRepository.findAll().stream()
                 .map(agencyMapper::toDto)

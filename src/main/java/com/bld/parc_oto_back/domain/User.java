@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +40,15 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Setter
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_agencies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "agency_id")
+    )
+    private List<Agency> favoriteAgencies = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
@@ -67,5 +77,25 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<Agency> getFavoriteAgencies() {
+        if (favoriteAgencies == null) {
+            favoriteAgencies = new ArrayList<>();
+        }
+        return favoriteAgencies;
+    }
+
+    public void addFavoriteAgency(Agency agency) {
+        if (favoriteAgencies == null) {
+            favoriteAgencies = new ArrayList<>();
+        }
+        favoriteAgencies.add(agency);
+    }
+
+    public void removeFavoriteAgency(Agency agency) {
+        if (favoriteAgencies != null) {
+            favoriteAgencies.remove(agency);
+        }
     }
 }

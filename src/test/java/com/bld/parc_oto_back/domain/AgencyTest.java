@@ -10,7 +10,7 @@ class AgencyTest {
 
     @Test
     void testAgencyCreation() {
-        Address address = new Address("123 Main St", "12345", "City", "Country");
+        Address address = new Address("123 Main St", "Georgia" , "12345", "City", "Country");
         Agency agency = new Agency(1L, address, "Test Agency", new ArrayList<>());
 
         assertEquals(1L, agency.getId());
@@ -30,7 +30,7 @@ class AgencyTest {
     @Test
     void testSettersAndGetters() {
         Agency agency = new Agency();
-        Address address = new Address("456 Elm St", "67890", "Town", "State");
+        Address address = new Address("456 Elm St", "Georgia" , "67890", "Town", "State");
 
         agency.setId(2L);
         agency.setAddress(address);

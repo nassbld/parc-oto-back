@@ -27,10 +27,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         String message = "Une erreur de contrainte d'unicité s'est produite";
 
-        if (ex.getMessage().contains("UK_email")) {
+        String exceptionMessage = ex.getMostSpecificCause().getMessage();
+
+        if (exceptionMessage.contains("UK_email")) {
             message = "Cette adresse email est déjà utilisée";
-        } else if (ex.getMessage().contains("UK_matricule")) {
+        } else if (exceptionMessage.contains("UK_matricule")) {
             message = "Ce matricule est déjà utilisé";
+        } else if (exceptionMessage.contains("UK_phone")) {
+            message = "Ce numéro de téléphone est déjà utilisé";
         }
 
         ErrorResponse error = new ErrorResponse(

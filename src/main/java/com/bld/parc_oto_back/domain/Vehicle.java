@@ -26,7 +26,7 @@ public class Vehicle {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VehicleStatus status;
+    private VehicleStatus status = VehicleStatus.AVAILABLE;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "agency_id", nullable = false)

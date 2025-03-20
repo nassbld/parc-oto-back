@@ -78,12 +78,12 @@ class AgencyServiceTest {
         Agency existingAgency = new Agency();
         existingAgency.setId(1L);
         existingAgency.setName("Old Name");
-        existingAgency.setAddress(new Address("Old Street", "12345", "Old City", "USA"));  // Utilisation de l'entité Address
+        existingAgency.setAddress(new Address("Old Street", "Georgia" , "12345", "Old City", "USA"));  // Utilisation de l'entité Address
 
         Agency updatedAgency = new Agency();
         updatedAgency.setId(1L);
         updatedAgency.setName("New Name");
-        updatedAgency.setAddress(new Address("New Street", "67890", "New City", "USA"));  // Nouvelle Address
+        updatedAgency.setAddress(new Address("New Street", "New Georgia" , "67890", "New City", "USA"));  // Nouvelle Address
 
         when(agencyRepository.findById(1L)).thenReturn(Optional.of(existingAgency));
 
@@ -93,6 +93,7 @@ class AgencyServiceTest {
 
         verify(agencyRepository, times(1)).save(existingAgency);
         assertEquals("New Name", existingAgency.getName());
+        assertEquals("New Georgia", existingAgency.getAddress().getDepartment());
         assertEquals("New Street", existingAgency.getAddress().getStreet());
         assertEquals("New City", existingAgency.getAddress().getCity());
         assertEquals("67890", existingAgency.getAddress().getPostalCode());

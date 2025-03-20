@@ -1,13 +1,16 @@
 package com.bld.parc_oto_back.domain;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
 
     @Test
     void testUserCreation() {
-        User user = new User(1L, "M123", "Doe", "John", "john.doe@example.com", "1234567890", "123");
+        User user = new User(1L, "M123", "Doe", "John", "john.doe@example.com", "1234567890", "123", new ArrayList<>());
 
         assertEquals(1L, user.getId());
         assertEquals("M123", user.getMatricule());

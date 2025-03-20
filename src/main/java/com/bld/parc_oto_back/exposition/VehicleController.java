@@ -51,6 +51,12 @@ public class VehicleController {
         return ResponseEntity.ok(vehicles);
     }
 
+    @PostMapping("/identity/agencies")
+    public ResponseEntity<List<VehicleIdentityDTO>> getVehiclesIdentityByAgencyIds(@RequestBody List<Long> agencyIds) {
+        List<VehicleIdentityDTO> vehicles = vehicleService.getVehiclesIdentityByAgencyIds(agencyIds);
+        return ResponseEntity.ok(vehicles);
+    }
+
     @PostMapping
     public ResponseEntity<Void> createVehicle(@RequestBody VehicleDTO vehicleDTO) {
         vehicleService.addVehicle(vehicleDTO);

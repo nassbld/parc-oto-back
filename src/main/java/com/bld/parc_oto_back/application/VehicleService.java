@@ -71,6 +71,12 @@ public class VehicleService {
                 .collect(Collectors.toList());
     }
 
+    public List<VehicleIdentityDTO> getVehiclesIdentityByAgencyIds(List<Long> agencyIds) {
+        return agencyIds.stream()
+                .flatMap(agencyId -> getVehiclesIdentityByAgencyId(agencyId).stream())
+                .collect(Collectors.toList());
+    }
+
     private VehicleIdentityDTO toVehicleIdentityDTO(Vehicle vehicle) {
         VehicleIdentityDTO vehicleIdentityDTO = new VehicleIdentityDTO();
         vehicleIdentityDTO.setVehicleId(vehicle.getId());

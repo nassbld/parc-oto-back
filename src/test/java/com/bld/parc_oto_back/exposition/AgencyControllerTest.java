@@ -38,7 +38,7 @@ class AgencyControllerTest {
 
     @Test
     void getAgencyById_shouldReturnAgency_whenAgencyExists() throws Exception {
-        Agency agency = new Agency(1L, new Address("123 Main St", "12345", "City", "Country"), "Test Agency", new ArrayList<>());
+        Agency agency = new Agency(1L, new Address("123 Main St", "Georgia" , "12345", "City", "Country"), "Test Agency", new ArrayList<>());
         when(agencyService.getAgencyById(1L)).thenReturn(Optional.of(agency).map(agencyMapper::toDto));
 
         mockMvc.perform(get("/agencies/1"))
@@ -57,7 +57,7 @@ class AgencyControllerTest {
 
     @Test
     void createAgency_shouldReturnNoContent() throws Exception {
-        Agency agency = new Agency(null, new Address("123 Main St", "12345", "City", "Country"), "New Agency", new ArrayList<>());
+        Agency agency = new Agency(null, new Address("123 Main St", "Georgia" , "12345", "City", "Country"), "New Agency", new ArrayList<>());
 
         mockMvc.perform(post("/agencies")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ class AgencyControllerTest {
 
     @Test
     void updateAgency_shouldReturnNoContent_whenIdMatches() throws Exception {
-        Agency agency = new Agency(1L, new Address("123 Main St", "12345", "City", "Country"), "Updated Agency", new ArrayList<>());
+        Agency agency = new Agency(1L, new Address("123 Main St", "Georgia" , "12345", "City", "Country"), "Updated Agency", new ArrayList<>());
 
         mockMvc.perform(put("/agencies/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -81,7 +81,7 @@ class AgencyControllerTest {
 
     @Test
     void updateAgency_shouldReturnBadRequest_whenIdDoesNotMatch() throws Exception {
-        Agency agency = new Agency(2L, new Address("123 Main St", "12345", "City", "Country"), "Updated Agency", new ArrayList<>());
+        Agency agency = new Agency(2L, new Address("123 Main St", "Georgia" , "12345", "City", "Country"), "Updated Agency", new ArrayList<>());
 
         mockMvc.perform(put("/agencies/1")
                         .contentType(MediaType.APPLICATION_JSON)

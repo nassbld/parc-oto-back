@@ -11,6 +11,7 @@ import lombok.*;
 @ToString
 public class Address {
     private String street;
+    private String department;
     private String postalCode;
     private String city;
     private String country;
