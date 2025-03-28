@@ -47,6 +47,14 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReservationDTO> getReservationsByUserId(Long userId) {
+        return reservationRepository.findByUserId(userId)
+                .stream()
+                .map(reservationMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+
     public List<ReservationWithInfosDTO> getReservationsWithInformationsByAgencyId(Long agencyId) {
         List<ReservationDTO> reservationsDTO = reservationRepository.findByAgencyId(agencyId).stream()
                 .map(reservationMapper::toDto)

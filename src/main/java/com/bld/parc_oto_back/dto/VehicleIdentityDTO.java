@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class VehicleIdentityDTO {
+    private Long id;
+
     private Long vehicleId;
     private String licensePlate;
     private Long agencyId;
